@@ -218,6 +218,7 @@ class MerchantUser(models.Model):
 
 class CustomerUser(models.Model):
     profile_pic = models.FileField(default="")
+    customer_id = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
 
 
@@ -376,14 +377,14 @@ def create_user_profile(sender, instance, created, **kwargs):
         print(instance)
 
         if instance.user_type == 1:
-            AdminUser.objects.create(auth_user_id=instance)
+            AdminUser.objects.create(admin_id=instance)
         if instance.user_type == 2:
-            StaffUser.objects.create(auth_user_id=instance)
+            StaffUser.objects.create(staff_id=instance)
         if instance.user_type == 3:
             MerchantUser.objects.create(
-                auth_user_id=instance, company_name="", gst_details="", address="")
+                merchant_id=instance, company_name="", gst_details="", address="")
         if instance.user_type == 4:
-            CustomerUser.objects.create(auth_user_id=instance)
+            CustomerUser.objects.create(merchant_id=instance)
 
 
 @receiver(post_save, sender=CustomUser)
