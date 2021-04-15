@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib.messages.views import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 
 @login_required(login_url="/admin/")
@@ -15,11 +16,38 @@ def admin_home(request):
 
 
 class CategoriesListView(ListView):
+
     model = Categories
     template_name = "admin_templates/category_list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("order_by", "id")
+
+        if filter_val != "":
+            cat = Categories.objects.filter(Q(title__contains=filter_val) | Q(
+                description__contains=filter_val)).order_by(order_by)
+        else:
+            cat = Categories.objects.all().order_by(order_by)
+
+        return cat
+
+    def get_context_data(self, **kwargs):
+
+        context = super(CategoriesListView, self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter", "")
+        context["orderby"] = self.request.GET.get("orderby", "id")
+        context["all_table_fields"] = Categories._meta.get_fields()
+        return context
 
 
 class CategoriesCreate(SuccessMessageMixin, CreateView):
+
+    def get_success_url(self):
+        return reverse('category_list')
+
     model = Categories
     success_message = "Category Added!"
     fields = "__all__"
@@ -37,6 +65,24 @@ class SubCategoriesListView(ListView):
     model = SubCategories
     template_name = "admin_templates/sub_category_list.html"
 
+    def get_queryset(self):
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("orderby", "id")
+        if filter_val != "":
+            cat = SubCategories.objects.filter(Q(title__contains=filter_val) | Q(
+                description__contains=filter_val)).order_by(order_by)
+        else:
+            cat = SubCategories.objects.all().order_by(order_by)
+
+        return cat
+
+    def get_context_data(self, **kwargs):
+        context = super(SubCategoriesListView, self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter", "")
+        context["orderby"] = self.request.GET.get("orderby", "id")
+        context["all_table_fields"] = SubCategories._meta.get_fields()
+        return context
+
 
 class SubCategoriesCreate(SuccessMessageMixin, CreateView):
     model = SubCategories
@@ -53,6 +99,7 @@ class SubCategoriesUpdate(SuccessMessageMixin, UpdateView):
 
 
 class MerchantUserListView(ListView):
+
     model = MerchantUser
     template_name = "admin_templates/merchant_list.html"
 
@@ -99,8 +146,10 @@ class MerchantUserUpdateView(SuccessMessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        merchantuser = MerchantUser.objects.get(auth_user_id=self.object.pk)
+        print(self.object)
+        merchantuser = MerchantUser.objects.get(merchant_id=self.object.pk)
         context["merchantuser"] = merchantuser
+        print(context)
         return context
 
     def form_valid(self, form):
@@ -111,7 +160,7 @@ class MerchantUserUpdateView(SuccessMessageMixin, UpdateView):
         user.save()
 
         # Saving Merchant user
-        merchantuser = MerchantUser.objects.get(auth_user_id=user.id)
+        merchantuser = MerchantUser.objects.get(merchant_id=user.id)
         if self.request.FILES.get("profile_pic", False):
             profile_pic = self.request.FILES["profile_pic"]
             fs = FileSystemStorage()

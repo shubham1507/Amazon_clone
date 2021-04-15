@@ -187,7 +187,7 @@ import uuid
 
 
 class CustomUser(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_type_choices = ((1, "Admin"), (2, "Staff"),
                          (3, "Merchant"), (4, "Customer"))
     user_type = models.CharField(
