@@ -242,6 +242,7 @@ class ProductView(View):
 
         j = 0
         for title_title in title_title_list:
+
             product_details = ProductDetails(
                 title=title_title, title_details=title_details_list[j], product_id=product)
             product_details.save()

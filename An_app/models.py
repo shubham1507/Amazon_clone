@@ -291,7 +291,7 @@ class ProductTransaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class ProductDetails(models.CharField):
+class ProductDetails(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)

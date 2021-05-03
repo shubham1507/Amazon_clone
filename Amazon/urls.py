@@ -8,5 +8,6 @@ from django.urls import include
 from Amazon import settings
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('admindashboard/', include("An_app.adminurls"))
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
