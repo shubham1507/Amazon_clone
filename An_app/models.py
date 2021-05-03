@@ -207,7 +207,7 @@ class StaffUser(models.Model):
 
 
 class MerchantUser(models.Model):
-    merchant_id = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    auth_user_id = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     profile_pic = models.FileField(default="")
     company_name = models.CharField(max_length=255)
     gst_details = models.CharField(max_length=255)
@@ -229,6 +229,9 @@ class Categories(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(default=1)
+
+    def get_absolute_url(self):
+        return reverse("category_list")
 
     def __str__(self):
         return ' {}'.format(self.title)
