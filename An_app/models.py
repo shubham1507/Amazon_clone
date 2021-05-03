@@ -300,7 +300,7 @@ class ProductDetails(models.Model):
     is_active = models.IntegerField(default=1)
 
 
-class ProductAbout(models.CharField):
+class ProductAbout(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
