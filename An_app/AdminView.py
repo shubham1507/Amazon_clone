@@ -293,7 +293,7 @@ class ProductListView(ListView):
         product_list = []
         for product in products:
             product_media = ProductMedia.objects.filter(
-                product_id=product.id, media_type=1, is_active=1).first()
+                product_id=product.id, media_type='1', is_active=1).first()
             product_list.append({"product": product, "media": product_media})
 
         return product_list
