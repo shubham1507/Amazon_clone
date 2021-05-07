@@ -44,5 +44,8 @@ urlpatterns = [
          AdminView.MerchantUserUpdateView.as_view(), name="merchant_update"),
 
     # Products
-    path('product_create', AdminView.ProductView.as_view(), name="product_view")
+    path('product_create', AdminView.ProductView.as_view(), name="product_view"),
+    path('product_list', AdminView.ProductListView.as_view(), name="product_list"),
+    path('file_upload', AdminView.file_upload, name="file_upload")
+
 ]

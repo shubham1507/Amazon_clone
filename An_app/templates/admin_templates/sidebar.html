@@ -19,7 +19,8 @@
                 <ul class="dropdown-menu">
                     <li
                         class='{% if request.path == category_list %} active {% endif %}{% if request.path == category_update %} active {% endif %}'>
-                        <a class="nav-link" href="{% url 'category_list' %}">All Categories</a></li>
+                        <a class="nav-link" href="{% url 'category_list' %}">All Categories</a>
+                    </li>
                     <li class='{% if request.path == category_create %} active {% endif %}'><a class="nav-link"
                             href="{% url 'category_create' %}">Add Categories</a></li>
                 </ul>
@@ -36,7 +37,8 @@
                 <ul class="dropdown-menu">
                     <li
                         class='{% if request.path == sub_category_list %} active {% endif %}{% if request.path == sub_category_update %} active {% endif %}'>
-                        <a class="nav-link" href="{% url 'sub_category_list' %}">All Sub Categories</a></li>
+                        <a class="nav-link" href="{% url 'sub_category_list' %}">All Sub Categories</a>
+                    </li>
                     <li class='{% if request.path == sub_category_create %} active {% endif %}'><a class="nav-link"
                             href="{% url 'sub_category_create' %}">Add Sub Categories</a></li>
                 </ul>
@@ -55,7 +57,8 @@
                             href="{% url 'merchant_create' %}">Add Merchant User</a></li>
                     <li
                         class='{% if request.path == merchant_list %} active {% endif %} {% if request.path == merchant_update %} active {% endif %}'>
-                        <a class="nav-link" href="{% url 'merchant_list' %}">Merchant User List</a></li>
+                        <a class="nav-link" href="{% url 'merchant_list' %}">Merchant User List</a>
+                    </li>
                 </ul>
             </li>
 
@@ -65,6 +68,8 @@
                 <ul class="dropdown-menu">
                     <li class='{% if request.path == product_view %} active {% endif %}'><a class="nav-link"
                             href="{% url 'product_view' %}">Add Products</a></li>
+                    <li class='{% if request.path == product_list %} active {% endif %}'><a class="nav-link"
+                            href="{% url 'product_list' %}">Products list</a></li>
                 </ul>
             </li>
         </ul>

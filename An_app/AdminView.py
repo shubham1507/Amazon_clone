@@ -8,6 +8,8 @@ from django.contrib.messages.views import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from Amazon.settings import BASE_URL
 
 
 @login_required(login_url="/admin/")
@@ -263,3 +265,35 @@ class ProductView(View):
             product_id=product, transaction_type=1, transaction_product_count=in_stock_total, transaction_description="Intially Item Added in Stocks")
         product_transaction.save()
         return HttpResponse("OK")
+
+
+@csrf_exempt
+def file_upload(request):
+    file = request.FILES["file"]
+    fs = FileSystemStorage()
+    filename = fs.save(file.name, file)
+    file_url = fs.url(filename)
+    return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
+
+
+class ProductListView(ListView):
+    model = Products
+    template_name = "admin_templates/product_list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("orderby", "id")
+        if filter_val != "":
+            products = Products.objects.filter(Q(product_name__contains=filter_val) | Q(
+                product_description__contains=filter_val)).order_by(order_by)
+        else:
+            products = Products.objects.all().order_by(order_by)
+
+        product_list = []
+        for product in products:
+            product_media = ProductMedia.objects.filter(
+                product_id=product.id, media_type=1, is_active=1).first()
+            product_list.append({"product": product, "media": product_media})
+
+        return product_list
