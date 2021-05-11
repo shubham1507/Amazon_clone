@@ -288,9 +288,9 @@ class ProductListView(ListView):
             products = Products.objects.filter(Q(product_name__contains=filter_val) | Q(
                 product_description__contains=filter_val)).order_by(order_by)
         else:
-            # products = Products.objects.all().order_by('id')
+            products = Products.objects.all().order_by('id')
 
-            products = Products.objects.all().order_by(order_by)
+            # products = Products.objects.all().order_by(order_by)
 
         product_list = []
         for product in products:
